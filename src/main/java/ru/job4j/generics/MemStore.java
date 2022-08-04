@@ -2,6 +2,7 @@ package ru.job4j.generics;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public final class MemStore<T extends Base> implements Store<T> {
 
@@ -23,14 +24,17 @@ public final class MemStore<T extends Base> implements Store<T> {
 
     @Override
     public boolean delete(String id) {
-        storage.remove(id);
-        return true;
+        if (storage.containsKey(id)) {
+            storage.remove(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public T findById(String id) {
         if (storage.containsKey(id)) {
-            storage.get(id);
+            return storage.get(id);
         }
         return null;
     }
