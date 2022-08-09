@@ -17,7 +17,8 @@ public class EvenNumbersIterator implements Iterator<Integer> {
         for (int i = index; i < data.length; i++) {
             if (data[i] % 2 == 0) {
                 index = i;
-                return true;
+                result = true;
+                break;
             }
         }
         return result;
