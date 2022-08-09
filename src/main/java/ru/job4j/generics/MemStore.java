@@ -18,7 +18,7 @@ public final class MemStore<T extends Base> implements Store<T> {
         boolean result = false;
         if (storage.containsKey(model.getId())) {
             storage.put(id, model);
-            return true;
+            result = true;
         }
         return result;
     }
@@ -28,7 +28,7 @@ public final class MemStore<T extends Base> implements Store<T> {
         boolean result = false;
         if (storage.containsKey(id)) {
             storage.remove(id);
-            return true;
+            result = true;
         }
         return result;
     }
