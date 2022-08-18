@@ -1,9 +1,6 @@
 package ru.job4j.collection;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 public class SimpleArrayList<T> implements SimpleList<T> {
     private T[] container;
@@ -36,16 +33,16 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     @Override
     public T set(int index, T newValue) {
-        Objects.checkIndex(index, container.length);
+        Objects.checkIndex(0, index);
         T tmp = container[index];
-        tmp = newValue;
+        container[index] = newValue;
         return tmp;
     }
 
     @Override
     public T remove(int index) {
         modCount++;
-        Objects.checkIndex(index, container.length);
+        Objects.checkIndex(0, index);
         T tmp = container[index];
         System.arraycopy(container, index + 1, container, index, container.length - index - 1);
         container[container.length - 1] = null;
@@ -54,13 +51,13 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     @Override
     public T get(int index) {
-        Objects.checkIndex(index, container.length);
+        Objects.checkIndex(0, index);
         return container[index];
     }
 
     @Override
     public int size() {
-        return container.length;
+        return container.length - 1;
     }
 
     @Override
@@ -69,12 +66,19 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
             @Override
             public boolean hasNext() {
-                return hasNext();
+                return size < container.length;
             }
 
             @Override
             public T next() {
-                return next();
+                int expectedModCount = modCount;
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                return container[modCount++];
             }
 
         };
