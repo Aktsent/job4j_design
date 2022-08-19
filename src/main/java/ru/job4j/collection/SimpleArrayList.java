@@ -63,24 +63,23 @@ public class SimpleArrayList<T> implements SimpleList<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-
+            int count = 0;
             @Override
             public boolean hasNext() {
-                return size < container.length;
+                int expectedModCount = modCount;
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                return count < container.length;
             }
 
             @Override
             public T next() {
-                int expectedModCount = modCount;
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException();
-                }
-                return container[modCount++];
+                return container[count++];
             }
-
         };
     }
 }
