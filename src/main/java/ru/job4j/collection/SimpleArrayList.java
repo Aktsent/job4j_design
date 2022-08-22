@@ -33,7 +33,7 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     @Override
     public T set(int index, T newValue) {
-        Objects.checkIndex(0, index);
+        Objects.checkIndex(index, size);
         T tmp = container[index];
         container[index] = newValue;
         return tmp;
@@ -42,35 +42,37 @@ public class SimpleArrayList<T> implements SimpleList<T> {
     @Override
     public T remove(int index) {
         modCount++;
-        Objects.checkIndex(0, index);
+        Objects.checkIndex(index, size);
         T tmp = container[index];
         System.arraycopy(container, index + 1, container, index, container.length - index - 1);
         container[container.length - 1] = null;
+        size--;
         return tmp;
     }
 
     @Override
     public T get(int index) {
-        Objects.checkIndex(0, index);
+        Objects.checkIndex(index, size);
         return container[index];
     }
 
     @Override
     public int size() {
-        return container.length - 1;
+        return size;
     }
 
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
             int count = 0;
+            int expectedModCount = modCount;
+
             @Override
             public boolean hasNext() {
-                int expectedModCount = modCount;
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return count < container.length;
+                return count < size;
             }
 
             @Override
