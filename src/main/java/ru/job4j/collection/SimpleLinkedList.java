@@ -26,27 +26,31 @@ public class SimpleLinkedList<E> implements LinkedList<E>  {
     @Override
     public E get(int index) {
         Objects.checkIndex(index, size);
-        for (int i = 1; i < size; i++) {
+        Node<E> n = first;
+        E rsl = n.getElement();
+        for (int i = 0; i <= index; i++) {
+            n = n.next;
             if (i == index) {
-                node.getElement();
+                rsl = n.getElement();
                 break;
             }
         }
-        return node.getElement();
+        return rsl;
     }
 
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
             int expectedModCount = modCount;
+            Node<E> n = first;
 
             @Override
             public boolean hasNext() {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                while (node.next == null) {
-                    break;
+                if (n != null) {
+                    return hasNext();
                 }
                 return hasNext();
             }
@@ -56,7 +60,7 @@ public class SimpleLinkedList<E> implements LinkedList<E>  {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return node.next.element;
+                return n.next.element;
             }
         };
     }
