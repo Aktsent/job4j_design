@@ -3,7 +3,6 @@ package ru.job4j.collection;
 import java.util.*;
 
 public class SimpleLinkedList<E> implements LinkedList<E>  {
-    private Node<E> node;
     private int size;
     private Node<E> first;
     private Node<E> last;
@@ -27,15 +26,10 @@ public class SimpleLinkedList<E> implements LinkedList<E>  {
     public E get(int index) {
         Objects.checkIndex(index, size);
         Node<E> n = first;
-        E rsl = n.getElement();
-        for (int i = 0; i <= index; i++) {
+        for (int i = 0; i < index; i++) {
             n = n.next;
-            if (i == index) {
-                rsl = n.getElement();
-                break;
-            }
         }
-        return rsl;
+        return n.getElement();
     }
 
     @Override
@@ -49,18 +43,16 @@ public class SimpleLinkedList<E> implements LinkedList<E>  {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                if (n != null) {
-                    return hasNext();
-                }
-                return hasNext();
+                return n.next != null;
             }
 
             @Override
             public E next() {
+                n = n.next;
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return n.next.element;
+                return n.getElement();
             }
         };
     }
