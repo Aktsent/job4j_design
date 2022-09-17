@@ -48,11 +48,12 @@ public class SimpleLinkedList<E> implements LinkedList<E>  {
 
             @Override
             public E next() {
-                n = n.next;
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return n.getElement();
+                Node<E> rsl = n;
+                n = n.next;
+                return rsl.element;
             }
         };
     }
