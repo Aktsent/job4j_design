@@ -43,7 +43,7 @@ public class SimpleLinkedList<E> implements LinkedList<E>  {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return n.next != null;
+                return n != null;
             }
 
             @Override
